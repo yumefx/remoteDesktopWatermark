@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import os
 import sys
 import time
@@ -55,7 +58,7 @@ class watermark(tkinter.Tk):
         sendThread = Thread(target=self.sendMsg,args=(name,date,state))
         sendThread.start()
 
-    def senfMsg(self,name,date,state):
+    def sendMsg(self,name,date,state):
         #if send failed,try 3 times
         for i in range(3):
             try:
@@ -82,7 +85,7 @@ class watermark(tkinter.Tk):
         buffsize = 1024
         self.conn = socket(AF_INET,SOCK_STREAM)
         try:
-            self.comm.connect((IP,Port))
+            self.conn.connect((IP,Port))
         except:
             #this can show error window,but this service need be quiet for user,so comment it.
             #and if link failed,save log to local path(in def sendMsg).
@@ -93,7 +96,7 @@ class watermark(tkinter.Tk):
         currentUser = getuser()
 
         #hide watermark when no remote user
-        if not checkRemote(currentUser) and (not self.procHide):
+        if (not checkRemote(currentUser)) and (not self.procHide):
             self.withdraw()
             self.procHide = True
             self.trySendMsg(currentUser,datetime.now(),"logout")
@@ -106,25 +109,26 @@ class watermark(tkinter.Tk):
             self.procHide = False
             self.trySendMsg(currentUser,datetime.now(),"login")
         #refresh every 0.5s
-        self.after(500,self.refresh())
+        self.after(500,self.refresh)
 
     def run(self):
         #actually this can put in def refresh,to get the remote desktop size
         #and i just set to 4000
         #what? you have a 8k screen,nevermind
         width = 4000 #win32api.GetSystemMetrics(0)
-        hight = 4000 #win32api.GetSystemMetrics(1)
+        height = 4000 #win32api.GetSystemMetrics(1)
         self.overrideredirect(True)                      #hide the window bounding box
+        self.geometry("+0+0")                             #set window position or size
         self.lift()                                      #set window on top
         self.attributes("-alpha",0.6)                    #make watermark transparent
-        self.WM_attributes("-topmost",True)              #always set window on top
-        self.WM_attributes("-disabled",True)             #disable window,so mouse can not click
-        self.WM_attributes("-tansparentcolor","white")   #window background set white and transparent
-        hwindow = pywintypes.HANDLE(int(self.frame),16)
+        self.wm_attributes("-topmost",True)              #always set window on top
+        self.wm_attributes("-disabled",True)             #disable window,so mouse can not click
+        self.wm_attributes("-transparentcolor","white")   #window background set white and transparent
+        hwindow = pywintypes.HANDLE(int(self.frame(),16))
         exStyle = win32con.WS_EX_COMPOSITED | win32con.WS_EX_LAYERED | win32con.WS_EX_NOACTIVATE | win32con.WS_EX_TOPMOST | win32con.WS_EX_TRANSPARENT
         win32api.SetWindowLong(hwindow,win32con.GWL_EXSTYLE,exStyle)
         #set text / font / text color / background color
-        label = tkinter.Label(textvarieble=self.text,font=("Times New Roman","40"),fg="#d5d5d5",bg="white")
+        label = tkinter.Label(textvariable=self.text,font=("Times New Roman","40"),fg="#d5d5d5",bg="white")
         label.pack()
         self.withdraw()
         self.procHide = True
