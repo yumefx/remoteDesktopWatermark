@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import sys
 import os
 import re
@@ -71,12 +74,12 @@ def tcplink(sock,addr):
             #when break connect send warning mail
             sock.close()
             print(addr,"offline")
-            lastLog = conn_hist[conn_list.index(addr)]
-            print(lastLog)
-            sendmail("watermark offline warning!","IP:" + addr[0] + "\nthe last log is:\n" + lastLog)
+            _index = conn_list.index(addr)
+            print(conn_hist[_index])
+            sendmail("watermark offline warning!","IP:" + addr[0] + "\nthe last log is:\n" + conn_hist[_index])
             conn_dt.pop(addr)
-            conn_list.pop(addr)
-            conn_hist.pop(lastLog)
+            conn_list.pop(_index)
+            conn_hist.pop(_index)
             break
 
 def printLog(host,ip,user,date,state):
