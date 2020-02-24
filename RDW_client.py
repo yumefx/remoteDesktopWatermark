@@ -70,7 +70,7 @@ class watermark(tkinter.Tk):
 
         #when all 3 times failed,print log to localpath.
         logFileDir = "C:/watermark/" + self.host
-        logFilePath = logFileDir + "/" + name + "log"
+        logFilePath = logFileDir + "/" + name + ".log"
         logFile = None
         if not os.path.isdir(logFileDir):
             os.makedirs(logFileDir)
@@ -78,7 +78,7 @@ class watermark(tkinter.Tk):
             logFile = open(logFilePath,"w")
         else:
             logFile = open(logFilePath,"a")
-        logFile.write(str(date) + ":" + state)
+        logFile.write(str(date) + ":" + state + "\n")
         logFile.close()
 
     def linkServer(self,IP,Port):
